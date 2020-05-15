@@ -1,0 +1,37 @@
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
+stages:
+  - build
+  - package
+
+before_script:
+  - chmod +x mvnw
+
+build:
+  image: maven:3-jdk-11-openj9
+  stage: build
+  cache:
+    paths:
+      - .m2/repository
+  tags:
+    - aman-ec2
+  script: ./mvnw package
+  artifacts:
+    paths:
+      - target/*.jar
+
+docker-build:
+  tags:
+    - aman-ec2
+  before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  stage: package
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"

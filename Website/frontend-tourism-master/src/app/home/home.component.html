@@ -1,0 +1,19 @@
+<div class="container">
+    <h1>Top Destinations</h1>
+    <div class="row">
+        <div class="col-md-3" *ngFor="let item of topCities">
+            <a routerLink="/city/{{item.id}}">
+                <app-info-card [place]="item"></app-info-card>
+            </a>
+        </div>
+    </div>
+
+    <h1>Top Attractions</h1>
+    <div class="row">
+        <div class="col-md-3" *ngFor="let item of topAttractions">
+            <a routerLink="/attraction/{{item.locationId}}">
+                <app-info-card [place]="item"></app-info-card>
+            </a>
+        </div>
+    </div>
+</div>

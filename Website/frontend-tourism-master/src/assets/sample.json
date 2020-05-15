@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Toronto",
+    "imageUrl": "../../assets/images/image4.jpeg"
+  },
+  {
+    "name": "Ottawa",
+    "imageUrl": "../../assets/images/image2.jpeg"
+  },
+  {
+    "name": "Halifax",
+    "imageUrl": "../../assets/images/image3.jpeg"
+  },
+  {
+    "name": "Cape",
+    "imageUrl": "../../assets/images/image1.jpeg"
+  },
+  {
+    "name": "Cape",
+    "imageUrl": "../../assets/images/image1.jpeg"
+  },
+  {
+    "name": "Cape",
+    "imageUrl": "../../assets/images/image1.jpeg"
+  },
+  {
+    "name": "Cape",
+    "imageUrl": "../../assets/images/image1.jpeg"
+  },
+  {
+    "name": "Cape",
+    "imageUrl": "../../assets/images/image1.jpeg"
+  }
+]

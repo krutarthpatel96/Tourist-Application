@@ -1,0 +1,201 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema cloud_tourism
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema cloud_tourism
+-- -----------------------------------------------------
+
+CREATE DATABASE IF NOT EXISTS `cloud_tourism` DEFAULT CHARACTER SET latin1 ;
+USE `cloud_tourism` ;
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`bus`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`bus` (
+  `bus_no` INT(11) NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(50) NOT NULL,
+  `capacity` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`bus_no`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`company`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`company` (
+  `company_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  `contact` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`company_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`city`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`city` (
+  `city_Id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  `province` VARCHAR(50) NOT NULL,
+  `url` VARCHAR(450) NULL DEFAULT NULL,
+  PRIMARY KEY (`city_Id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 11
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`route`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`route` (
+  `route_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `source_id` INT(11) NOT NULL,
+  `destination_id` INT(11) NOT NULL,
+  PRIMARY KEY (`route_id`),
+  INDEX `Route_Source_idx` (`source_id` ASC)  ,
+  INDEX `Route_Destination_idx` (`destination_id` ASC)  ,
+  CONSTRAINT `Destination_City`
+    FOREIGN KEY (`destination_id`)
+    REFERENCES `cloud_tourism`.`city` (`city_Id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `Source_City`
+    FOREIGN KEY (`source_id`)
+    REFERENCES `cloud_tourism`.`city` (`city_Id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`journey`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`journey` (
+  `journey_Id` INT(11) NOT NULL AUTO_INCREMENT,
+  `route_id` INT(11) NULL DEFAULT NULL,
+  `company_id` INT(11) NOT NULL,
+  `bus_no` INT(11) NOT NULL,
+  `date` DATE NOT NULL,
+  `duration` INT(11) NOT NULL,
+  `amount` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`journey_Id`),
+  INDEX `Journey_Route_idx` (`route_id` ASC)  ,
+  INDEX `Journey_Company_idx` (`company_id` ASC)  ,
+  INDEX `Journey_Bus_idx` (`bus_no` ASC)  ,
+  CONSTRAINT `Journey_Bus`
+    FOREIGN KEY (`bus_no`)
+    REFERENCES `cloud_tourism`.`bus` (`bus_no`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `Journey_Company`
+    FOREIGN KEY (`company_id`)
+    REFERENCES `cloud_tourism`.`company` (`company_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `Journey_Route`
+    FOREIGN KEY (`route_id`)
+    REFERENCES `cloud_tourism`.`route` (`route_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 8
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`booking`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`booking` (
+  `booking_Id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_Id` VARCHAR(50) NOT NULL,
+  `journey_Id` INT(11) NOT NULL,
+  `transaction_mode` VARCHAR(50) NULL DEFAULT NULL,
+  `amount` INT(11) NULL DEFAULT NULL,
+  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `total_seats` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`booking_Id`),
+  INDEX `fk_Booking_Jouney1_idx` (`journey_Id` ASC)  ,
+  CONSTRAINT `fk_Booking_Jouney1`
+    FOREIGN KEY (`journey_Id`)
+    REFERENCES `cloud_tourism`.`journey` (`journey_Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 61
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`booking_audit`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`booking_audit` (
+  `journey_Id` INT(11) NOT NULL,
+  `seat_capacity` INT(11) NOT NULL,
+  `seats_available` INT(11) NOT NULL,
+  PRIMARY KEY (`journey_Id`),
+  INDEX `fk_Booking_Audit_Jouney1_idx` (`journey_Id` ASC)  ,
+  CONSTRAINT `fk_Booking_Audit_Jouney1`
+    FOREIGN KEY (`journey_Id`)
+    REFERENCES `cloud_tourism`.`journey` (`journey_Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`tourist_location`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`tourist_location` (
+  `location_Id` INT(11) NOT NULL AUTO_INCREMENT,
+  `city_Id` INT(11) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `type` VARCHAR(50) NOT NULL,
+  `url` VARCHAR(250) NOT NULL,
+  `features` VARCHAR(1500) NOT NULL,
+  PRIMARY KEY (`location_Id`),
+  INDEX `Location_City_idx` (`city_Id` ASC)  ,
+  CONSTRAINT `Location_City`
+    FOREIGN KEY (`city_Id`)
+    REFERENCES `cloud_tourism`.`city` (`city_Id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 27
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `cloud_tourism`.`user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cloud_tourism`.`user` (
+  `user_Id` VARCHAR(50) NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `contact` VARCHAR(10) NOT NULL,
+  `email` VARCHAR(50) NOT NULL,
+  `gender` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`user_Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+

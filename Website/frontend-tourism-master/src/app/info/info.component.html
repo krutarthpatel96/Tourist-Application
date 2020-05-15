@@ -1,0 +1,9 @@
+<div class="container" style="text-align:center">
+    <div class="row">
+        <div class="place-card col-md-4" *ngFor="let item of places">
+            <a routerLink="/{{type}}/{{getKey(item)}}">
+                <app-info-card [place]="item"></app-info-card>
+            </a>
+        </div>
+    </div>
+</div>

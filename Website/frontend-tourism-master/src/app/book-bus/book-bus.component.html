@@ -1,0 +1,65 @@
+<mat-vertical-stepper [linear]="true" #stepper>
+    <mat-step>
+        <div class="row">
+            <div class="col-md-6">
+                <ng-template matStepLabel>Order Summary</ng-template>
+                <table style="margin-top: 50px;" class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th>From</th>
+                            <td>{{busDetails.sourceCity}}</td>
+                        </tr>
+                        <tr>
+                            <th>To</th>
+                            <td>{{busDetails.destinationCity}}</td>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <td>{{busDetails.bus.date}}</td>
+                        </tr>
+                        <tr>
+                            <th>Number of Tickets</th>
+                            <td>
+                                <input [(ngModel)]="numTickets" type="number" [max]="busDetails.bus.seatsAvailable"
+                                    min="1" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Cost</th>
+                            <td>{{busDetails.bus.cost * numTickets | currency:'CAD'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button mat-raised-button matStepperNext>Next</button>
+            </div>
+        </div>
+    </mat-step>
+    <mat-step>
+        <div class="row">
+            <div class="col-md-6">
+                <ng-template matStepLabel>Credit Card Details</ng-template>
+                <form>
+                    <mat-form-field  style="margin-top: 50px; width: 400px;">
+                        <mat-label style="margin-top: 50px;" for="cardNumber">16 Digit Number: </mat-label>
+                        <input matInput name="cardNumber" [(ngModel)]="cardNumber" placeholder="5555-5555-5555-5555"
+                            type="text" pattern="^[0-9]{4}\-[0-9]{4}\-[0-9]{4}\-[0-9]{4}" />
+                            <mat-hint>16 digits number with hypen separator</mat-hint>
+                    </mat-form-field>
+                    <br />
+                    <mat-form-field>
+                        <mat-label style="margin-top: 50px;" for="CVV">CVV: </mat-label>
+                        <input matInput name="CVV" type="password" maxlength="4" [(ngModel)]="cvv" />
+                    </mat-form-field>
+                    <br />
+                    <mat-form-field>
+                        <mat-label style="margin-top: 50px;" for="expiry">Expiry Date (MMYY):</mat-label>
+                        <input name="expiry" type="text" placeholder="MMYY" matInput maxlength="4"
+                            [(ngModel)]="cardExp" />
+                    </mat-form-field>
+                    <br />
+                    <button mat-raised-button (click)="payAndcompleteBooking()">Pay</button>
+                </form>
+            </div>
+        </div>
+    </mat-step>
+</mat-vertical-stepper>

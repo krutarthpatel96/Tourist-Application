@@ -1,0 +1,11 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "validockerhub/analytics_service_docker_repo:master"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "8081"
+    }
+  ]
+}
