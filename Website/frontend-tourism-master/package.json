@@ -30,7 +30,7 @@
     "@ng-bootstrap/ng-bootstrap": "^6.0.0",
     "aws-amplify": "^2.2.6",
     "aws-amplify-angular": "^4.1.7",
-    "highcharts": "^8.0.4",
+    "highcharts": "^9.0.0",
     "highcharts-angular": "^2.4.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
